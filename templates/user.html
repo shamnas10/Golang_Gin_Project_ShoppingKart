@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add your meta tags, title, and any other necessary head content here -->
+</head><style>
+    /* Style for the form */
+   
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        width: 181px;
+        margin-right: 10px;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Style for the table */
+    #userTable {
+        margin: 20px;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #userTable th, #userTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    #userTable th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style for pagination buttons */
+    #prev-btn, #next-btn {
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+<body>
+    <form id="userDataForm">
+        <label for="userdata">Enter Page Number</label>
+        <input type="text" placeholder="enter integer value" name="userdata" id="userdata"><input type="submit" value="Submit">
+    </form>
+    
+    <table id="userTable"><thead>
+        <tr>
+            <th>ID</th>
+            <th>USER NAME</th>
+            <th>Email</th>
+        </tr></thead>
+        <tbody>
+
+            <!-- Data will be populated here using AJAX -->
+
+        </tbody>
+    </table>
+
+    <button id="prev-btn">Previous</button>
+    <button id="next-btn">Next</button>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let currentPage = 1;
+            const pageSize = 30; // Change this to your desired page size
+            
+            const tableBody = $('#userTable tbody');
+            const userDataForm = $('#userDataForm');
+            
+            function fetchData() {
+                // const userData = $('#userdata').val();
+                
+                $.ajax({
+                    url: `/Getuserdata?pageSize=${pageSize}&page=${currentPage}`,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        tableBody.empty(); // Clear existing data
+                        
+                        $.each(data.Listusers, function(index, user) {
+                            const row = $('<tr>').append(
+                                $('<td>').text(user.Id),
+                                $('<td>').text(user.Username),
+                                $('<td>').text(user.Email)
+                            );
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Error:', error.responseText);
+                    }
+                });
+            }
+            
+            // Add event listener for the form submission
+            userDataForm.submit(function(e) { 
+    e.preventDefault(); // Prevent the form from submitting in the traditional way
+    
+    // Get the value from the text field and convert it to an integer
+    const userData = parseInt($('#userdata').val());
+
+    // Check if userData is a valid positive integer
+    if (!isNaN(userData) && userData > 0) {
+        currentPage = userData; // Set currentPage to the entered value
+        fetchData();
+    } else {
+        alert("Please enter a valid positive integer as the page number.");
+    }
+});
+            
+            // Add event listeners for pagination buttons
+            $('#prev-btn').click(function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    fetchData();
+                }
+            });
+            
+            $('#next-btn').click(function() {
+                currentPage++;
+                fetchData();
+            });
+            
+            // Initial data fetch
+            fetchData();
+        });
+    </script>
+</body>
+</html>

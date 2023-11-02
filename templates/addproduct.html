@@ -1,0 +1,83 @@
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="file"] {
+            border: none;
+            padding: 0;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{{ template "top" }}
+    <h1>Add Product</h1>
+    {{ if .Error }}
+    <div style="color: rgb(0, 255, 42); font-weight: italic;font-size: small; text-align:center;">{{ .Error }}</div>
+{{ end }}
+    <form action="/addproduct" method="POST"  enctype="multipart/form-data">
+        <label for="productName">Product Name</label>
+        <input type="text" id="productName" name="productName"><br><br>
+
+        <label for="productDescription">Product Description</label>
+        <input type="text" id="productDescription" name="productDescription"><br><br>
+
+        <label for="price">Price</label>
+        <input type="text" id="price" name="price"><br><br>
+
+        <label for="image">Image</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <input type="submit" value="Submit">
+    </form>

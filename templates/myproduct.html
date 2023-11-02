@@ -1,0 +1,23 @@
+{{ template "top" }}
+
+    {{ range .items }}
+
+    <section class="product" style="float: left;">
+        <img class="im"   src="{{ .ProductImage }}"  alt="Product image">
+        <h2>{{ .ProductName }}</h2>
+        <p>{{ .ProductDescription }}</p>
+        <p>${{ .ProductPrice }}</p>
+        <form action="/deleteproduct/{{ .ProductId }}" method="POST">
+            <button type="submit">Delete Product</button>
+        </form>
+        
+        
+        
+        
+    </section>
+    </main>
+    {{ end }}
+
+
+
+    
